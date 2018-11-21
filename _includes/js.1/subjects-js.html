@@ -1,0 +1,39 @@
+{% if site.subjectsplit contains "word" %}
+{% include array/subject-words.html %}
+{% else %}
+{% include array/subjects.html %}
+{% endif %}
+<script>
+    var subjectTerms = [ {%- for unique in uniqueSubjects -%}{% if unique != "" and unique != " " %}{% assign count = subjects | where_exp: "item", "item == unique" | size %}{%- if count > min-count -%}{ "subject" : "{{ unique | trim }}", "count" : {{ count }} }{% unless forloop.last %}, {% endunless %}{% endif %}{% endif %}{% endfor %} ];
+    var counts = subjectTerms.map(function(obj){ return obj.count; });
+    var countMax = counts.reduce(function(a, b) {
+        return Math.max(a, b);
+    });
+    var countMin = {{ min-count }};
+    var cloud = document.getElementById("htmltagcloud");
+    /* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+    function shuffle(array) {
+        var m = array.length, t, i;
+        while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+        }
+        return array;
+    }
+    function mapSize(x) {
+        return Math.round((x - countMin) * (9) / (countMax - countMin) + 1);
+    }
+    /* create cloud */
+    function makeCloud(array) {
+        var i;
+        var item;
+        for (i = 0; i < array.length; i++) {
+            var size = mapSize(array[i].count)
+            item = '<span class="wrd btn btn-outline-secondary ' + array[i].subject + ' tagcloud' + size + '"><a href="{{ "/browse/" | relative_url }}#' + array[i].subject + '">' + array[i].subject + '</a></span>';
+            cloud.innerHTML += item;
+        }
+    }
+    makeCloud(subjectTerms);    
+</script>

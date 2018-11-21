@@ -1,0 +1,32 @@
+
+{%- assign items = site.data[site.csvtitle] -%}
+
+<script>
+    var collection = "{{site.repo-collection-id}}";
+    var objectids = [{% for item in items %}{% if forloop.last %}"{{item.object-id}}"{%else%}"{{item.object-id}}",{% endif %}{% endfor %}];
+    {% for i in (1..9) %}var image{{ i }} = document.getElementById("car-image{{ i }}");
+    var itemlink{{ i }} = document.getElementById("itemlink{{ i }}");
+    var thumb{{ i }} = document.getElementById("thumb{{ i }}");
+    {% endfor %}
+    /* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
+    function shuffle(array) {
+        var m = array.length, t, i;
+        while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+        }
+        return array;
+    }
+    shuffle(objectids);
+    console.log(objectids);
+    {% for i in (1..9) %}
+itemlink{{ i }}.href = '{% if site.repo-link == "on" %}{{ site.repo-url }}/cdm/ref/collection/{{ site.repo-collection-id }}/id/'+objectids[{{ i }}{% else %}{{ site.baseurl }}/items/'+objectids[{{ i }}]+'.html'{% endif %};
+{% if site.mediatypes != "images" %} 
+thumb{{ i }}.src = '{{ site.repo-url }}/utils/getthumbnail/collection/{{ site.repo-collection-id }}/id/'+objectids[{{ i }}];
+{%else%}
+image{{ i }}.src = 'https://digital.lib.uidaho.edu/utils/ajaxhelper/?CISOROOT={{ site.repo-collection-id }}&CISOPTR='+objectids[{{ i }}]+'&action=2&action=2&DMSCALE={{site.image-percentage-medium}}&DMWIDTH=1012&DMHEIGHT=1048&DMX=0&DMY=0&DMTEXT=&DMROTATE=0';{%endif%}
+    {% endfor %}
+   
+</script>

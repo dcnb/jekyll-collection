@@ -1,18 +1,14 @@
-{% if site.subjectsplit contains "word" %}
-{% include array/subject-words.html %}
-{% else %}
-{% include array/subjects.html %}
-{% endif %}
 <script>
-    var subjectTerms = [ {%- for unique in uniqueSubjects -%}{% if unique != "" and unique != " " %}{% assign count = subjects | where_exp: "item", "item == unique" | size %}{%- if count > min-count -%}{ "subject" : "{{ unique | trim }}", "count" : {{ count }} }{% unless forloop.last %}, {% endunless %}{% endif %}{% endif %}{% endfor %} ];
+$.getJSON("{{ "/data/subjects.json" | relative_url }}", function(json){
+    /* set the min count for subject terms, too many terms = slow page load! */
+    var minSize = 1; /*at 5 = 96, 6 = 76, 8 = 60 */
+    var subjectTerms = json.subjects.filter(function(x) { return x.count > minSize; }); 
+    //var countMax = subjectTerms.reduce((max, p) => p.count > max ? p.count : max, subjectTerms[0].count);
     var counts = subjectTerms.map(function(obj){ return obj.count; });
-    var countMax = counts.reduce(function(a, b) {
-        return Math.max(a, b);
-    });
-    var countMin = {{ min-count }};
-    var cloud = document.getElementById("htmltagcloud");
+    var countMax = counts.reduce(function(a, b) { return Math.max(a, b); });
+    var cloud = document.getElementById("cloud");
     /* Fisher-Yates shuffle https://bost.ocks.org/mike/shuffle/ */
-    function shuffle(array) {
+    /* function shuffle(array) {
         var m = array.length, t, i;
         while (m) {
         i = Math.floor(Math.random() * m--);
@@ -21,19 +17,19 @@
         array[i] = t;
         }
         return array;
-    }
-    function mapSize(x) {
-        return Math.round((x - countMin) * (9) / (countMax - countMin) + 1);
-    }
+    } */
+    function mapSize(x) { return Math.round(x * 9 / countMax + 1); }
     /* create cloud */
-    function makeCloud(array) {
+    function makeGrid(array) {
         var i;
+        //shuffle(array);
         var item;
         for (i = 0; i < array.length; i++) {
             var size = mapSize(array[i].count)
-            item = '<span class="wrd btn btn-outline-secondary ' + array[i].subject + ' tagcloud' + size + '"><a href="{{ "/browse/" | relative_url }}#' + array[i].subject + '">' + array[i].subject + '</a></span>';
+            item = '<a class="btn btn-outline-secondary m-1 wrd tagcloud' + size + '" href="' + array[i].link + '" >' + array[i].subject + '</a>';
             cloud.innerHTML += item;
         }
     }
-    makeCloud(subjectTerms);    
+    makeGrid(subjectTerms);
+});
 </script>
