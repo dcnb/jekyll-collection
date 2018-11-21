@@ -2,10 +2,6 @@
 layout: page 
 ---
 {% assign items = site.data[site.csvtitle] %}
-<style>
-  .item{padding:10px;}
-  .card{padding:4px;}
-</style>
 <h2 class="text-center">
 <input type="text" id="quicksearch" placeholder="Search ... " > 
 <input class="btn btn-success btn-lg align-top" title="Search" type="submit" value="Go" alt="Search" id="goButton" onclick="filterItems()"> 
@@ -17,28 +13,31 @@ layout: page
 {% endfor %}
 <div class="row" id="isocontainer-new">
     {% for item in items %}
-    <div class="item col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12" >
+    <div class="item col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12 mb-2 p-2" >
+            <div class="card">
         {% assign lowercase_type = item.type | downcase %} {% if lowercase_type contains "image" %}
-            <a target="_blank" href="{% include item-link.html %}">{% if forloop.index < 20 %}<img class="card-img-top lazy"  src="{% include image/small.html %}" alt="Card image cap">
-        {% else %} <img class="card-img-top lazy"  data-original="{% include image/small.html %}" alt="Card image cap"> {% endif %}</a>
+            <a href="{% include item-link.html %}"><img class="card-img-top lazy"  {% if forloop.index < 20 %}src={%else%}data-original={%endif%}"{% include image/80.html %}" alt="Card image cap of {{ item.title }}"></a>
         {% endif %}
         <div class="card text-center" id="content">
-        <h3 class="card-title">{{ item.title }} </h3>
+        <h3 class="card-title"><a href="{% include item-link.html %}">{{ item.title }}</a></h3>
         <p class="card-text"><b>Date</b>:{{item.date}}</p>
         {% unless lowercase_type contains "image" %}<p >
      <a  target="_blank" href="{% include item-link.html %}">
       <img class="card-img-top thumb lazy" data-original="{% include image/thumb.html %}" alt="item thumbnail">
      </a></p> {% endunless %}
      <p>
-    {% assign subjects = item.subject | split:';' %}
-        {% for subject in subjects %}{% if subject !=" " %}
-        <a class="btn btn-sm btn-secondary m-1" data-filter="{{ subject | trim }}" href="#{{ subject | trim }}">{{ subject }}</a> 
+        {%- assign subjects = item.subject | split: ';' -%}
+        {%- assign location = item.place | split: ';' -%}
+        {%- assign topics = subjects | concat: location -%}
+        {% for topic in topics %}{% if topic !=" " %}
+        <a class="btn btn-sm btn-secondary m-1 filter" data-filter="{{ topic | trim |escape }}" href="{{ topic | trim | url_param_escape | prepend: '/browse.html#' | relative_url }}">{{ topic }}</a> 
         {% endif %}{% endfor %} 
                      </p>
          <p class="card-text">{{item.description | truncatewords: 20}}</p>
             <p >
             <a href="{% include item-link.html %}" target="_blank" class="btn btn-info" title="link to {{ item.title }}">Go to Item</a>
        </p>
+         </div>
          </div>
     </div>
 {% endfor %}

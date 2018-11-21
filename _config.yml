@@ -4,25 +4,25 @@
 # JEKYLL_ENV=production jekyll build
 
 # Site/Collection settings
-title: The Big Burn Collection
-tagline: An exhibition of materials related to the 'Big Burn' fires of 1910
+title: Psychiana Digital Collection
+tagline: Materials from the Frank B. Robinson Papers documenting Psychiana, a religion popular in the 1930s and 40s
 subjects:  #separate semi-colon(';')
-description: "The Big Burn Collection is an online exhibit of materials related to the 'Big Burn' fires of 1910 that devastated much of Northern Idaho and Northwest Montana. The collection includes photographs, documents, first-person accounts, and oral histories pertaining to the fires and the local and national responses to them." 
-mediatypes: images,documents #options[documents,images,video,sound,data] separate semi-colon(';')
-locations: Wallace, Idaho; Lolo Pass, Mont.; Selway-Bitterroot, Idaho #separate by semi-colon(';')
-latitude: 47.487853 #to determine center of map
-longitude: -115.872459 #to determine center of map
+description: "Materials from the Frank B. Robinson Papers documenting Psychiana, a religion popular in the 1930s and 40s" 
+mediatypes: images; documents; audio; correspondence #options[documents,images,video,sound,data] separate semi-colon(';')
+locations: Moscow, ID #separate by semi-colon(';')
+latitude: 46.733711 #to determine center of map
+longitude: -117.001252 #to determine center of map
 
 # repository variables (leave blank if self-contained)
 repo-url: https://digital.lib.uidaho.edu 
-repo-collection-id: psychiana
-repo-link: on #options[on] - if on, will link to base repository item url outside of directory; if blank, will link to item url within directory, which will require the page-gen settings to be turned on below-- NOTE: these item pages will not work via Github Pages
+repo-collection-id: phs
+repo-link: #options[on] - if on, will link to base repository item url outside of directory; if blank, will link to item url within directory, which will require the page-gen settings to be turned on below-- NOTE: these item pages will not work via Github Pages
 
 # Site Population settings
-csvtitle: psychiana
+csvtitle: phs
 pagetypes: data,map,timeline,about #options for pagetypes- [data,map,timeline,about] -- home, browse, and subjects are auotmatic
-subjectsplit: words # options[subjects - whole subjects, including two word entries separted by semi-colon; words - breaks all subjects into individual words]
-subjectcolor: # Leave blank if you just want the link color for bootstrap; options [orange,red,blue,green,purple,gray]
+subjectsplit: subjects # options[subjects - whole subjects, including two word entries separted by semi-colon; words - breaks all subjects into individual words]
+subjectcolor: purple # Leave blank if you just want the link color for bootstrap; options [orange,red,blue,green,purple,gray]
 mapzoomlevel: 10 # options - 
 datatable: title,creator,description,date,subjects,source # options any field on csv [title,creator,date,description,location,subjects,latitude,longitude,format,type,object-id]
 image-percentage-small: 15
@@ -35,8 +35,8 @@ image-percentage-large: 50
 
 
 # url variables
-url: https://dcnb.github.io
-baseurl: /jekyll-collection-contentdm
+url: https://www.lib.uidaho.edu
+baseurl: /digital/psychiana
 
 email: dbecker@uidaho.edu
 
@@ -58,7 +58,7 @@ bstheme: Materia # leave blank or comment out for plain bootstrap
 
 # page gen settings https://github.com/avillafiorita/jekyll-datapage_gen
 page_gen:
-  - data: 'psychiana' #should be the same as your csvtitle above
+  - data: 'phs' #should be the same as your csvtitle above
     template: 'items' 
     name: 'object-id' #name of the unique identifier in your metadata sheet
     dir: 'items' #which directory you'd like your pages generated to
