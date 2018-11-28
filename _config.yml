@@ -31,13 +31,13 @@ image-percentage-medium: 50
 image-percentage-large: 80
 
 # url variables
-url: https://www.lib.uidaho.edu
-baseurl: /digital/dworshak
+# url: https://www.lib.uidaho.edu
+# baseurl: /jekyll 
 
 
 # url variables
-# url: https://dcnb.github.io
-# baseurl: /jekyll-collection-contentdm
+url: https://dcnb.github.io
+baseurl: /jekyll-collection-contentdm
 
 email: dbecker@uidaho.edu
 
